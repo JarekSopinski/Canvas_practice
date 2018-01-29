@@ -3,6 +3,17 @@ const c = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
+//****************** Setting up cursor *****************************************
+
+const mouse = {
+
+    x: undefined,
+    y: undefined
+
+};
+
+const maxRadius = 10;
+
 //******************* Adding title *******************************************
 
 
@@ -26,6 +37,16 @@ function addTitle() {
 
 }
 
+// ************************* DETECTING MOUSE MOVEMENT: ***********************************
+
+window.addEventListener('mousemove',
+    function (event) {
+
+        mouse.x = event.x;
+        mouse.y = event.y;
+
+    });
+
 // ************************ RESPONSIVE CANVAS: *********************************
 
 window.addEventListener('resize', function () {
@@ -46,13 +67,14 @@ function Circle(x, y, dx, dy, radius) {
     this.dx = dx;
     this.dy = dy;
     radius = 1;
+    this.minRadius = radius;
 
     this.draw = function () {
 
         c.beginPath();
         c.arc(this.x, this.y, radius, 0, Math.PI * 2, false);
-        c.fillStyle = 'white';
-        c.fill();
+        c.strokeStyle = 'white';
+        c.stroke();
     };
 
     this.update = function () {
@@ -67,6 +89,22 @@ function Circle(x, y, dx, dy, radius) {
 
         this.x += this.dx;
         this.y += this.dy;
+
+        // interactivity:
+
+        if (mouse.x - this.x < 50
+            && mouse.x - this.x > -50
+            && mouse.y - this.y < 50
+            && mouse.y - this.y > -50
+        ) {
+            if (radius < maxRadius) {
+                radius += 1;
+            }
+
+        } else if (radius > this.minRadius)
+        {
+            radius -= 1;
+        }
 
         this.draw()
     }
