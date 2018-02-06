@@ -15,6 +15,10 @@ const mouse = {
 
 const colors = ['#2185C5', '#7ECEFD', '#FFF6E5', '#FF7F66'];
 
+// !!!variables used for gravity:
+let gravity = 1;
+let friction = 0.99;
+
 // Event Listeners
 addEventListener('mousemove', event => {
     mouse.x = event.clientX;
@@ -58,9 +62,16 @@ Object.prototype.update = function() {
     if (this.y + this.radius > canvas.height) {
         // if object fall behind bottom of the screen
 
-        this.dy = - this.dy; // velocity is reversed
+        this.dy = - this.dy * friction; // velocity is reversed
+        // friction represents 'energy' which the object loses every time it touches bottom
+        // so the bigger friction, the slower it will stop bouncing
 
-    };
+    } else {
+
+        this.dy += gravity; // object accelerates while falling
+        //console.log(this.dy); <--- see how velocity is increased and reversed
+
+    }
 
     this.y += this.dy; // object constantly falls towards bottom
     this.draw()
@@ -77,6 +88,7 @@ Object.prototype.draw = function() {
 // Implementation
 
 let ball;
+let ballArray = [];
 
 function init() {
 
