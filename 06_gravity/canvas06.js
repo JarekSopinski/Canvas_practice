@@ -49,9 +49,10 @@ function distance(x1, y1, x2, y2) {
 }
 
 // Objects
-function Ball(x, y, dy, radius, color) {
+function Ball(x, y, dx, dy, radius, color) {
     this.x = x;
     this.y = y;
+    this.dx = dx;
     this.dy = dy; // y velocity
     this.radius = radius;
     this.color = color
@@ -59,7 +60,9 @@ function Ball(x, y, dy, radius, color) {
 
 Object.prototype.update = function() {
 
-    if (this.y + this.radius > canvas.height) {
+    // condition for gravity and friction:
+
+    if (this.y + this.radius + this.dy > canvas.height) {
         // if object fall behind bottom of the screen
 
         this.dy = - this.dy * friction; // velocity is reversed
@@ -73,6 +76,16 @@ Object.prototype.update = function() {
 
     }
 
+    // condition for moving within x axis
+
+    if (this.x + this.radius + this.dx > canvas.width || this.x - this.radius <= 0) {
+        // if object touches left or right edge of the screen
+
+        this.dx = -this.dx; // x velocity is reversed
+
+    }
+
+    this.x += this.dx;
     this.y += this.dy; // object constantly falls towards bottom
     this.draw()
 };
@@ -82,6 +95,7 @@ Object.prototype.draw = function() {
     c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
     c.fillStyle = this.color;
     c.fill();
+    c.stroke();
     c.closePath()
 };
 
@@ -91,12 +105,14 @@ let ball;
 let ballArray = [];
 
 function init() {
+    const radius = 30;
+    for (let i = 0; i < 100; i++) { // loop used to generate some number of objects
 
-    for (let i = 0; i < 500; i++) { // loop used to generate some number of objects
-
-        const x = randomIntFromRange(0, canvas.width); // getting random x using function from template
-        const y = randomIntFromRange(0, canvas.height); // getting random y using function from template
-        ballArray.push(new Ball(x, y, 2, 30, 'red')); // creating new object within a loop
+        const x = randomIntFromRange(radius, canvas.width - radius); // getting random x using function from template
+        const y = randomIntFromRange(0, canvas.height - radius); // getting random y using function from template
+        // - radius <-- so some objects don't get stuck at the bottom
+        const dx = randomIntFromRange(-2, 2);
+        ballArray.push(new Ball(x, y, dx, 2, radius, 'red')); // creating new object within a loop
 
     }
 
