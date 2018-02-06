@@ -37,11 +37,15 @@ function randomColor(colors) {
     return colors[Math.floor(Math.random() * colors.length)]
 }
 
-function distance(x1, y1, x2, y2) {
-    const xDist = x2 - x1;
-    const yDist = y2 - y1;
+// calculating distance between two objects using Pythagorean Theorem
+function getDistance(x1, y1, x2, y2) {
 
-    return Math.sqrt(Math.pow(xDist, 2) + Math.pow(yDist, 2))
+    let xDistance = x2 - x1; // horizontal distance between x2 and x1
+    let yDistance = y2 - y1; // vertical distance between y2 and y1
+
+    return Math.sqrt(Math.pow(xDistance, 2) + Math.pow(yDistance, 2));
+    // based on Pythagorean Theorem, a2+b2=c2
+    // The Math.sqrt() function returns the square root of a number
 }
 
 // Objects
@@ -85,6 +89,8 @@ function animate() {
     circle2.x = mouse.x; // circle will follow mouse (we use function and event listener at the top)
     circle2.y = mouse.y;
     circle2.update();
+
+    console.log(getDistance(circle1.x, circle1.y, circle2.x, circle2.y));
 }
 
 init();
