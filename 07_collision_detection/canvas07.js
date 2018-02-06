@@ -9,8 +9,8 @@ canvas.height = innerHeight;
 
 // Variables
 const mouse = {
-    x: innerWidth / 2,
-    y: innerHeight / 2
+    x: 10,
+    y: 10
 };
 
 const colors = ['#2185C5', '#7ECEFD', '#FFF6E5', '#FF7F66'];
@@ -76,7 +76,7 @@ let circle2;
 function init() {
 
     circle1 = new Circle(300, 300, 100, 'black');
-    circle2 = new Circle(undefined, undefined, 30, 'red');
+    circle2 = new Circle(10, 10, 30, 'red');
 
     }
 
@@ -90,7 +90,15 @@ function animate() {
     circle2.y = mouse.y;
     circle2.update();
 
-    console.log(getDistance(circle1.x, circle1.y, circle2.x, circle2.y));
+    if ( getDistance(circle1.x, circle1.y, circle2.x, circle2.y) < circle1.radius + circle2.radius ) {
+        // if two circles are colliding, color is changed
+        circle1.color = 'red';
+    } else {
+        circle1.color = 'black';
+    }
+
+    //console.log(getDistance(circle1.x, circle1.y, circle2.x, circle2.y));
+    // use this console.log to see how distance is calculated
 }
 
 init();
