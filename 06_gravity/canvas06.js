@@ -1,3 +1,5 @@
+// Built on a canvas template by Christopher Lis (Chris Courses)
+
 // Initial Setup
 const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d');
@@ -43,15 +45,24 @@ function distance(x1, y1, x2, y2) {
 }
 
 // Objects
-function Ball(x, y, radius, color) {
+function Ball(x, y, dy, radius, color) {
     this.x = x;
     this.y = y;
+    this.dy = dy; // y velocity
     this.radius = radius;
     this.color = color
 }
 
 Object.prototype.update = function() {
-    this.y += 1;
+
+    if (this.y + this.radius > canvas.height) {
+        // if object fall behind bottom of the screen
+
+        this.dy = - this.dy; // velocity is reversed
+
+    };
+
+    this.y += this.dy; // object constantly falls towards bottom
     this.draw()
 };
 
@@ -69,7 +80,7 @@ let ball;
 
 function init() {
 
-    ball = new Ball(canvas.width / 2, canvas.height / 2, 30, 'red');
+    ball = new Ball(canvas.width / 2, canvas.height / 2, 2, 30, 'red');
     console.log(ball);
 }
 
