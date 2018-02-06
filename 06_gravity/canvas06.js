@@ -17,7 +17,7 @@ const colors = ['#2185C5', '#7ECEFD', '#FFF6E5', '#FF7F66'];
 
 // !!!variables used for gravity:
 let gravity = 1;
-let friction = 0.99;
+let friction = 0.59;
 
 // Event Listeners
 addEventListener('mousemove', event => {
@@ -29,7 +29,11 @@ addEventListener('resize', () => {
     canvas.width = innerWidth;
     canvas.height = innerHeight;
 
-    init()
+    init() // whenever we resize, canvas is restarted
+});
+
+addEventListener('click', function () {
+    init(); // whenever we click the page, canvas is restarted
 });
 
 // Utility Functions
@@ -101,18 +105,21 @@ Object.prototype.draw = function() {
 
 // Implementation
 
-let ball;
-let ballArray = [];
+let ballArray;
 
 function init() {
-    const radius = 30;
-    for (let i = 0; i < 100; i++) { // loop used to generate some number of objects
 
+    ballArray = []; //whenever we call init(), ballArray is reset to an empty array
+
+    for (let i = 0; i < 400; i++) { // loop used to generate some number of objects
+        const radius = randomIntFromRange(8, 20);
         const x = randomIntFromRange(radius, canvas.width - radius); // getting random x using function from template
         const y = randomIntFromRange(0, canvas.height - radius); // getting random y using function from template
         // - radius <-- so some objects don't get stuck at the bottom
         const dx = randomIntFromRange(-2, 2);
-        ballArray.push(new Ball(x, y, dx, 2, radius, 'red')); // creating new object within a loop
+        const dy = randomIntFromRange(-2, 2);
+        const color = randomColor(colors); // returns random color from an array
+        ballArray.push(new Ball(x, y, dx, dy, radius, color)); // creating new object within a loop
 
     }
 
