@@ -92,16 +92,28 @@ let ballArray = [];
 
 function init() {
 
-    ball = new Ball(canvas.width / 2, canvas.height / 2, 2, 30, 'red');
-    console.log(ball);
+    for (let i = 0; i < 500; i++) { // loop used to generate some number of objects
+
+        const x = randomIntFromRange(0, canvas.width); // getting random x using function from template
+        const y = randomIntFromRange(0, canvas.height); // getting random y using function from template
+        ballArray.push(new Ball(x, y, 2, 30, 'red')); // creating new object within a loop
+
+    }
+
 }
 
 // Animation Loop
 function animate() {
-    requestAnimationFrame(animate);
-    c.clearRect(0, 0, canvas.width, canvas.height);
-    ball.update();
 
+    requestAnimationFrame(animate);
+
+    c.clearRect(0, 0, canvas.width, canvas.height); // clearing canvas after every 'frame'
+
+    for (let i = 0; i < ballArray.length; i++) {
+
+        ballArray[i].update(); // see Object.prototype.update
+
+    }
 
 }
 
