@@ -74,9 +74,10 @@ function init() {
 
     for (let i = 0; i < 4; i++) {
 
-        let x = Math.random() * innerWidth; // random x coordinate
-        let y = Math.random() * innerHeight; // random y coordinate
-        const radius = 100;
+        const radius = 80;
+        let x = randomIntFromRange(radius, canvas.width - radius); // random x coordinate
+        let y = randomIntFromRange(radius, canvas.height - radius); // random y coordinate
+        // randomInt function is used to prevent spawning on screen borders
         const color = 'blue';
 
         // below we prevent particles from appearing at similar coordinates
@@ -92,8 +93,8 @@ function init() {
 
                     // if collision happens, we want to recalculate particle's coordinates:
                     // this process will repeat itself until new particles does not overlap with previous ones
-                    x = Math.random() * innerWidth;
-                    y = Math.random() * innerHeight;
+                    x = randomIntFromRange(radius, canvas.width - radius);
+                    y = randomIntFromRange(radius, canvas.height - radius);
 
                     j = -1; // restarting loop
 
