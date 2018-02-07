@@ -14,7 +14,7 @@ const mouse = {
     y: innerHeight / 2
 };
 
-const colors = ['#2185C5', '#7ECEFD', '#FFF6E5', '#FF7F66'];
+const colors = ['#2185C5', '#7ECEFD', '#FF7F66'];
 
 // Event Listeners
 addEventListener('mousemove', event => {
@@ -128,6 +128,7 @@ function Particle(x, y, radius, color) {
     this.radius = radius;
     this.color = color;
     this.mass = 1; // value needed for resolveCollision() function
+    this.opacity = 0; // starting value for opacity which increases when mouse gets close to part.
 
     this.update = particles => { // particles are passed as parameter to update method
 
@@ -162,6 +163,23 @@ function Particle(x, y, radius, color) {
             this.velocity.y = -this.velocity.y // velocity is reversed if part. touches screen's edge
         }
 
+
+        // mouse collision detection:
+
+        if (distance(mouse.x, mouse.y, this.x, this.y) < 120 && this.opacity < 0.2) {
+            // we check if mouse is close to a particle
+            //console.log('collided');
+
+            this.opacity += 0.02;
+            // if mouse is close, opacity is changes but only to 0.2 (&& this.opacity < 0.2)
+
+        } else if (this.opacity > 0) {
+            this.opacity -= 0.2; // opacity return to original value
+            this.opacity = Math.max(0, this.opacity) // opacity is contained between 0 and 0.2
+            //console.log(this.opacity);
+        }
+
+
         // adding velocities for x and y axis:
 
         this.x += this.velocity.x;
@@ -172,6 +190,14 @@ function Particle(x, y, radius, color) {
     this.draw = function () {
         c.beginPath();
         c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+
+        c.save(); // saves current state of canvas
+        c.globalAlpha = this.opacity; // changes opacity of all canvas elements
+        // but thanks to save / restore, only fill gets opacity
+        c.fillStyle = this.color;
+        c.fill();
+        c.restore();
+
         c.strokeStyle = this.color;
         c.stroke();
         c.closePath()
@@ -186,13 +212,13 @@ function init() {
 
     particles = [];
 
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 200; i++) {
 
-        const radius = 15;
+        const radius = 20;
         let x = randomIntFromRange(radius, canvas.width - radius); // random x coordinate
         let y = randomIntFromRange(radius, canvas.height - radius); // random y coordinate
         // randomInt function is used to prevent spawning on screen borders
-        const color = 'blue';
+        const color = randomColor(colors);
 
         // below we prevent particles from appearing at similar coordinates
         // (if that would happen, collision would be active from the start)
