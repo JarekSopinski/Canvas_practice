@@ -120,13 +120,14 @@ function Particle(x, y, radius, color) {
     this.velocity = {
         // random velocities in x & y axis
 
-        x: Math.random() - 0.5,
-        y: Math.random() - 0.5
+        x: (Math.random() - 0.5) * 5,
+        y: (Math.random() - 0.5) * 5
 
     };
 
     this.radius = radius;
     this.color = color;
+    this.mass = 1; // value needed for resolveCollision() function
 
     this.update = particles => { // particles are passed as parameter to update method
 
@@ -141,7 +142,9 @@ function Particle(x, y, radius, color) {
             if (distance(this.x, this.y, particles[i].x, particles[i].y) - this.radius * 2 < 0) {
                 // on every loop iteration we get distance between this particle and all the surrounding particles
 
-                console.log('has collided');
+                // we resolve collisions between this part. and others using utility function:
+                resolveCollision(this, particles[i]);
+                //console.log('has collided');
 
             }
 
@@ -183,9 +186,9 @@ function init() {
 
     particles = [];
 
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 100; i++) {
 
-        const radius = 80;
+        const radius = 15;
         let x = randomIntFromRange(radius, canvas.width - radius); // random x coordinate
         let y = randomIntFromRange(radius, canvas.height - radius); // random y coordinate
         // randomInt function is used to prevent spawning on screen borders
