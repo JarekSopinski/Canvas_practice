@@ -49,6 +49,15 @@ function distance(x1, y1, x2, y2) {
 function Particle(x, y, radius, color) {
     this.x = x;
     this.y = y;
+
+    this.velocity = {
+        // random velocities in x & y axis
+
+        x: Math.random() - 0.5,
+        y: Math.random() - 0.5
+
+    };
+
     this.radius = radius;
     this.color = color;
 
@@ -70,6 +79,9 @@ function Particle(x, y, radius, color) {
             }
 
         }
+
+        this.x += this.velocity.x; // adding velocity in x axis
+        this.y += this.velocity.y; // adding velocity in y axis
 
     };
 
