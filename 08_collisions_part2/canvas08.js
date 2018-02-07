@@ -80,8 +80,22 @@ function Particle(x, y, radius, color) {
 
         }
 
-        this.x += this.velocity.x; // adding velocity in x axis
-        this.y += this.velocity.y; // adding velocity in y axis
+        // preventing particles from drifting off screen:
+
+        // left and right:
+        if (this.x - this.radius <= 0 || this.x + this.radius >= innerWidth) {
+            this.velocity.x = -this.velocity.x // velocity is reversed if part. touches screen's edge
+        }
+
+        // top and bottom:
+        if (this.y - this.radius <= 0 || this.y + this.radius >= innerHeight) {
+            this.velocity.y = -this.velocity.y // velocity is reversed if part. touches screen's edge
+        }
+
+        // adding velocities for x and y axis:
+
+        this.x += this.velocity.x;
+        this.y += this.velocity.y;
 
     };
 
