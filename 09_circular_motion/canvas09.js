@@ -60,6 +60,12 @@ function Particle(x, y, radius, color) {
 
 
     this.update = function () {
+
+        const lastPoint = {
+            x: this.x,
+            y: this.y
+        };
+
         // Move points over time, based on incrementing radians
         this.radians += this.velocity;
 
@@ -69,14 +75,16 @@ function Particle(x, y, radius, color) {
         this.x = x + Math.cos(this.radians) * this.distanceFromCenter;
         this.y = y + Math.sin(this.radians) * this.distanceFromCenter;
 
-        this.draw()
+        this.draw(lastPoint)
     };
 
-    this.draw = function () {
+    this.draw = lastPoint => {
         c.beginPath();
-        c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-        c.fillStyle = this.color;
-        c.fill();
+        c.strokeStyle = this.color;
+        c.lineWidth = this.radius;
+        c.moveTo(lastPoint.x, lastPoint.y);
+        c.lineTo(this.x, this.y);
+        c.stroke();
         c.closePath()
     };
 
