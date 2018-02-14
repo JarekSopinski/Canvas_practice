@@ -55,10 +55,8 @@ function Particle(x, y, radius, color) {
     // randomized radiance for each particle
     // Pi*2 is a full circle, so particles will appear at random 'points' within full circle
     this.velocity = 0.05;
-    this.distanceFromCenter = {
-        x: randomIntFromRange(50, 120),
-        y: randomIntFromRange(50, 120)
-    }; // randomized distance from center for each particle
+    this.distanceFromCenter = randomIntFromRange(50, 120);
+    // randomized distance from center for each particle
 
 
     this.update = function () {
@@ -68,8 +66,8 @@ function Particle(x, y, radius, color) {
         //Circular motion
         // we need to use cosinus for x and sinus for y
         // we're referencing random distance from center for x and y
-        this.x = x + Math.cos(this.radians) * this.distanceFromCenter.x;
-        this.y = y + Math.sin(this.radians) * this.distanceFromCenter.y;
+        this.x = x + Math.cos(this.radians) * this.distanceFromCenter;
+        this.y = y + Math.sin(this.radians) * this.distanceFromCenter;
 
         this.draw()
     };
@@ -100,7 +98,10 @@ function init() {
 // Animation Loop
 function animate() {
     requestAnimationFrame(animate);
-    c.clearRect(0, 0, canvas.width, canvas.height);
+    // below clearRect (from template) is changed to fillRect (witch uses previously definied fillStyle)
+    // so we can get a 'trail effect'
+    c.fillStyle = 'rgba(255, 255, 255, 0.05)';
+    c.fillRect(0, 0, canvas.width, canvas.height);
 
     particles.forEach(particle => {
         particle.update();
