@@ -14,7 +14,7 @@ const mouse = {
     y: innerHeight / 2
 };
 
-const colors = ['#2185C5', '#7ECEFD', '#FFF6E5', '#FF7F66'];
+const colors = ['#00BDFF', '#4D39C', '#088EFF'];
 
 // Event Listeners
 addEventListener('mousemove', event => {
@@ -57,6 +57,7 @@ function Particle(x, y, radius, color) {
     this.velocity = 0.05;
     this.distanceFromCenter = randomIntFromRange(50, 120);
     // randomized distance from center for each particle
+    this.lastMousePos = {x: x, y: y};
 
 
     this.update = function () {
@@ -69,11 +70,15 @@ function Particle(x, y, radius, color) {
         // Move points over time, based on incrementing radians
         this.radians += this.velocity;
 
+        // Mouse drag effect
+        this.lastMousePos.x += (mouse.x - this.lastMousePos.x) * 0.05;
+        this.lastMousePos.y += (mouse.y - this.lastMousePos.y) * 0.05;
+
         //Circular motion
         // we need to use cosinus for x and sinus for y
         // we're referencing random distance from center for x and y
-        this.x = x + Math.cos(this.radians) * this.distanceFromCenter;
-        this.y = y + Math.sin(this.radians) * this.distanceFromCenter;
+        this.x = this.lastMousePos.x + Math.cos(this.radians) * this.distanceFromCenter;
+        this.y = this.lastMousePos.y + Math.sin(this.radians) * this.distanceFromCenter;
 
         this.draw(lastPoint)
     };
@@ -98,7 +103,7 @@ function init() {
 
     for (let i = 0; i < 50; i++) {
         const radius = (Math.random() * 2) + 1; // random radius between 1 and 2
-        particles.push(new Particle(canvas.width / 2, canvas.height / 2, radius, 'blue'));
+        particles.push(new Particle(canvas.width / 2, canvas.height / 2, radius, randomColor(colors)));
     };
 
     console.log(particles);
